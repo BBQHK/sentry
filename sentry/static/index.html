@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="color-scheme" content="dark" />
+  <title>Sentry</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%23121510'/%3E%3Ccircle cx='16' cy='16' r='7' fill='none' stroke='%23d2f25c' stroke-width='2'/%3E%3Ccircle cx='16' cy='16' r='2' fill='%23d2f25c'/%3E%3C/svg%3E" />
+  <link rel="stylesheet" href="/static/app.css" />
+</head>
+<body>
+  <div class="app">
+    <header>
+      <div class="brand">
+        <span class="mark" aria-hidden="true"></span>
+        <div>
+          <h1>Sentry</h1>
+          <p class="sub">Pan / tilt camera</p>
+        </div>
+      </div>
+      <div class="status">
+        <span id="mode-pill" class="pill">…</span>
+        <span id="camera-pill" class="pill">Camera</span>
+        <span id="arm-pill" class="pill">Idle</span>
+      </div>
+    </header>
+
+    <p id="link-error" class="banner" hidden>Reconnecting to Sentry…</p>
+
+    <main>
+      <section class="stage">
+        <div class="viewfinder" id="viewfinder">
+          <img id="feed" alt="Live camera" />
+          <div id="crosshair" class="crosshair"></div>
+          <span class="corner tl"></span>
+          <span class="corner tr"></span>
+          <span class="corner bl"></span>
+          <span class="corner br"></span>
+          <p id="video-message" class="video-message" hidden></p>
+          <div class="readout">
+            <span id="read-pan">PAN —</span>
+            <span id="read-tilt">TILT —</span>
+          </div>
+        </div>
+      </section>
+
+      <aside class="panel">
+        <button type="button" id="arm-button" class="arm" aria-pressed="false">Arm gimbal</button>
+        <p id="arm-hint" class="hint">Arming moves the servos to the angles below. Stay clear of the bracket.</p>
+        <p id="servo-error" class="error" hidden></p>
+
+        <div class="stick-wrap">
+          <div id="stick" class="stick" role="application" aria-label="Pan and tilt joystick">
+            <div id="knob" class="knob"></div>
+          </div>
+        </div>
+
+        <label class="field">
+          <span class="field-head">
+            <span class="label" id="pan-label">Pan</span>
+            <span class="value" id="pan-value">135.0°</span>
+          </span>
+          <input id="pan-slider" type="range" min="45" max="225" step="1" value="135" />
+        </label>
+
+        <label class="field">
+          <span class="field-head">
+            <span class="label" id="tilt-label">Tilt</span>
+            <span class="value" id="tilt-value">135.0°</span>
+          </span>
+          <input id="tilt-slider" type="range" min="75" max="195" step="1" value="135" />
+        </label>
+
+        <label class="field">
+          <span class="field-head">
+            <span class="label">Speed</span>
+            <span class="value" id="speed-value">90°/s</span>
+          </span>
+          <input id="speed-slider" type="range" min="15" max="240" step="5" value="90" />
+        </label>
+
+        <div class="split">
+          <button type="button" id="center-button">Center</button>
+          <a class="btn" id="snapshot" href="/snapshot.jpg" download="sentry.jpg">Save frame</a>
+        </div>
+
+        <div>
+          <div class="field-head">
+            <span class="label">Presets</span>
+            <button type="button" id="store-mode" class="text-btn" aria-pressed="false">Store</button>
+          </div>
+          <div class="preset-row">
+            <button type="button" data-preset="0">1</button>
+            <button type="button" data-preset="1">2</button>
+            <button type="button" data-preset="2">3</button>
+          </div>
+          <p id="preset-hint" class="hint">Click a number to move there. Turn on Store, then click a number to save the current view.</p>
+        </div>
+
+        <div class="checks">
+          <label><input id="crosshair-toggle" type="checkbox" checked /> Crosshair</label>
+          <label><input id="low-light-toggle" type="checkbox" /> Brighter exposure</label>
+        </div>
+
+        <p class="hint">
+          <kbd>W</kbd> <kbd>A</kbd> <kbd>S</kbd> <kbd>D</kbd> or arrows move.
+          <kbd>C</kbd> centers. <kbd>Esc</kbd> disarms. <kbd>1</kbd>–<kbd>3</kbd> recall presets.
+          Double-click the picture for fullscreen.
+          If a direction is backwards, set <code>invert</code> for that axis in <code>config.toml</code> and restart.
+        </p>
+      </aside>
+    </main>
+  </div>
+  <script src="/static/app.js"></script>
+</body>
+</html>

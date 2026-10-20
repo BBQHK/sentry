@@ -1,0 +1,44 @@
+# Sentry — pan/tilt camera on a Raspberry Pi 5.
+#
+# The LD-3015MG travels 0–270° on a 500–2500 µs pulse at 50 Hz.
+# 135° is the middle of that range (1500 µs), not 90°.
+# min_angle / max_angle are a software safety window inside that travel.
+# Widen them only after you have watched the bracket move with the camera removed.
+
+[server]
+host = "0.0.0.0"
+port = 8080
+
+[camera]
+# 0 is usually the USB camera. If the picture is wrong, try 1.
+device = 0
+width = 1280
+height = 720
+fps = 30
+jpeg_quality = 80
+
+[pca9685]
+address = 0x40
+frequency = 50
+
+[servos]
+min_pulse_us = 500
+max_pulse_us = 2500
+actuation_range = 270
+default_speed = 90
+# Pulses start only after Arm is pressed in the browser, unless this is true.
+arm_on_start = false
+
+[servos.pan]
+channel = 0
+min_angle = 45
+max_angle = 225
+center = 135
+invert = false
+
+[servos.tilt]
+channel = 1
+min_angle = 75
+max_angle = 195
+center = 135
+invert = false
