@@ -79,7 +79,7 @@ pip install -r requirements.txt
 python -m sentry
 ```
 
-Open http://127.0.0.1:8080. The header says **Simulation**. A USB webcam on the PC is used if one is present; otherwise the page draws a reticle you can move. Arming does not talk to a servo driver.
+Open http://127.0.0.1:8070. The header says **Simulation**. A USB webcam on the PC is used if one is present; otherwise the page draws a reticle you can move. Arming does not talk to a servo driver.
 
 ## Install on the Pi 5
 
@@ -107,7 +107,7 @@ Address `40` should appear. `70` is the PCA9685 all-call address and can show up
 .venv/bin/python -m sentry
 ```
 
-From another computer on the LAN, open `http://<pi-ip>:8080`. The terminal prints that address when it starts.
+From another computer on the LAN, open `http://<pi-ip>:8070`. The terminal prints that address when it starts.
 
 There is no login on the page. Run it on a network you trust.
 
