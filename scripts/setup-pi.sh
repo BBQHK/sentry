@@ -15,8 +15,8 @@ if command -v raspi-config >/dev/null; then
   sudo raspi-config nonint do_i2c 0 || true
 fi
 
-# Sentry's own bus: SDA GPIO23 (pin 16), SCL GPIO24 (pin 18).
-OVERLAY='dtoverlay=i2c-gpio,bus=3,i2c_gpio_sda=23,i2c_gpio_scl=24'
+# Sentry's own bus: SDA GPIO24 (pin 18), SCL GPIO25 (pin 22).
+OVERLAY='dtoverlay=i2c-gpio,bus=3,i2c_gpio_sda=24,i2c_gpio_scl=25'
 BOOT=""
 if [[ -f /boot/firmware/config.txt ]]; then
   BOOT=/boot/firmware/config.txt
@@ -24,7 +24,7 @@ elif [[ -f /boot/config.txt ]]; then
   BOOT=/boot/config.txt
 fi
 if [[ -n "$BOOT" ]]; then
-  if grep -q 'i2c_gpio_sda=23' "$BOOT"; then
+  if grep -q 'i2c_gpio_sda=24' "$BOOT"; then
     echo "Software I2C overlay already present in $BOOT"
   else
     echo "$OVERLAY" | sudo tee -a "$BOOT" >/dev/null

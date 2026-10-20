@@ -21,8 +21,9 @@ jpeg_quality = 80
 address = 0x40
 frequency = 50
 # Software I2C, not the default bus on GPIO2/GPIO3.
-# Pin 16 = GPIO23 SDA, pin 18 = GPIO24 SCL, pin 17 = 3.3V, pin 20 = GND.
-# Requires: dtoverlay=i2c-gpio,bus=3,i2c_gpio_sda=23,i2c_gpio_scl=24
+# Pin 18 = GPIO24 SDA, pin 22 = GPIO25 SCL, pin 17 = 3.3V, pin 20 = GND.
+# Pin 16 is left free. Requires:
+# dtoverlay=i2c-gpio,bus=3,i2c_gpio_sda=24,i2c_gpio_scl=25
 bus = 3
 
 [servos]

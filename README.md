@@ -24,16 +24,16 @@ The default I2C pins (physical 3 and 5) stay free for the other project. Sentry 
 
 | Left header | Connect to | What that pin is |
 | --- | --- | --- |
-| SDA | Pi pin 16 | GPIO23 |
+| SDA | Pi pin 18 | GPIO24 |
 | VCC | Pi pin 17 | 3.3 V |
-| SCL | Pi pin 18 | GPIO24 |
+| SCL | Pi pin 22 | GPIO25 |
 | GND | Pi pin 20 | ground |
 | OE | leave open | outputs are already enabled |
 
 `scripts/setup-pi.sh` adds this line to `/boot/firmware/config.txt` and leaves the hardware I2C bus enabled:
 
 ```
-dtoverlay=i2c-gpio,bus=3,i2c_gpio_sda=23,i2c_gpio_scl=24
+dtoverlay=i2c-gpio,bus=3,i2c_gpio_sda=24,i2c_gpio_scl=25
 ```
 
 Reboot after that line is added. The bus number is `pca9685.bus` in `config.toml`.
@@ -89,7 +89,7 @@ Raspberry Pi OS Bookworm, 64-bit. Python 3.11 or newer.
 bash scripts/setup-pi.sh
 ```
 
-The script creates `.venv`, installs the Python packages, keeps the default I2C bus available, and adds the software bus on pins 16 and 18. Then:
+The script creates `.venv`, installs the Python packages, keeps the default I2C bus available, and adds the software bus on pins 18 and 22. Then:
 
 ```bash
 sudo usermod -aG i2c,video $USER
@@ -138,7 +138,7 @@ journalctl -u sentry -f
 
 | What you see | What to check |
 | --- | --- |
-| Arm fails, I2C error in the page | `i2cdetect -y 3` shows `40`. User is in group `i2c`. The `i2c-gpio` line is in `/boot/firmware/config.txt` and the Pi was rebooted. SDA is pin 16, SCL is pin 18, power is pin 17, ground is pin 20. |
+| Arm fails, I2C error in the page | `i2cdetect -y 3` shows `40`. User is in group `i2c`. The `i2c-gpio` line is in `/boot/firmware/config.txt` and the Pi was rebooted. SDA is pin 18, SCL is pin 22, power is pin 17, ground is pin 20. |
 | Servo buzzes or twitches | Common ground is connected. Servo supply can actually deliver the current. Pulse still 500–2500 µs at 50 Hz. |
 | Servo slams into the bracket | Power off. Narrow `min_angle` / `max_angle`. Reseat the horn at center. |
 | Camera pill says no camera | `v4l2-ctl --list-devices`. Set `camera.device` to the other index (`0` or `1`, or `/dev/video0`). User is in group `video`. Try another USB port. |

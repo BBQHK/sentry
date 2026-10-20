@@ -69,8 +69,8 @@ class Pca9685Driver:
         except RuntimeError as exc:
             raise RuntimeError(
                 f"{exc} Sentry expects /dev/i2c-{settings.i2c_bus} "
-                "(SDA GPIO23 = pin 16, SCL GPIO24 = pin 18). "
-                "Add dtoverlay=i2c-gpio,bus=3,i2c_gpio_sda=23,i2c_gpio_scl=24 "
+                "(SDA GPIO24 = pin 18, SCL GPIO25 = pin 22). "
+                "Add dtoverlay=i2c-gpio,bus=3,i2c_gpio_sda=24,i2c_gpio_scl=25 "
                 "to /boot/firmware/config.txt and reboot. The default I2C pins are left free."
             ) from exc
         try:
