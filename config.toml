@@ -12,7 +12,7 @@ port = 8070
 [camera]
 # First USB camera on the Pi. video1 is only a side channel of the same camera.
 # The other picture nodes are video2, video4, and video6.
-device = "/dev/video0"
+device = "/dev/video6"
 width = 1280
 height = 720
 fps = 30
