@@ -10,8 +10,9 @@ host = "0.0.0.0"
 port = 8070
 
 [camera]
-# 0 is usually the USB camera. If the picture is wrong, try 1.
-device = 0
+# First USB camera on the Pi. video1 is only a side channel of the same camera.
+# The other picture nodes are video2, video4, and video6.
+device = "/dev/video0"
 width = 1280
 height = 720
 fps = 30
