@@ -18,6 +18,7 @@ def settings(**overrides) -> Settings:
         camera_fps=10,
         jpeg_quality=80,
         i2c_address=0x40,
+        i2c_bus=3,
         pwm_frequency=50,
         min_pulse_us=500,
         max_pulse_us=2500,

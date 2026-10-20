@@ -30,6 +30,7 @@ class Settings:
     camera_fps: int
     jpeg_quality: int
     i2c_address: int
+    i2c_bus: int
     pwm_frequency: int
     min_pulse_us: int
     max_pulse_us: int
@@ -95,6 +96,10 @@ def _settings_from(data: dict) -> Settings:
     if not 0x03 <= address <= 0x77:
         raise ConfigError("pca9685.address is not a valid 7-bit I2C address")
 
+    i2c_bus = _int(board, "bus", "pca9685")
+    if not 0 <= i2c_bus <= 16:
+        raise ConfigError("pca9685.bus must be between 0 and 16")
+
     frequency = _int(board, "frequency", "pca9685")
     if not 40 <= frequency <= 60:
         raise ConfigError("pca9685.frequency must stay between 40 and 60 Hz for the LD-3015MG")
@@ -127,6 +132,7 @@ def _settings_from(data: dict) -> Settings:
         camera_fps=fps,
         jpeg_quality=quality,
         i2c_address=address,
+        i2c_bus=i2c_bus,
         pwm_frequency=frequency,
         min_pulse_us=min_pulse,
         max_pulse_us=max_pulse,

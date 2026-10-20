@@ -20,17 +20,23 @@ These servos are strong enough to pinch a finger or crack a printed bracket. Kee
 
 This matches the blue PCA9685 in the project photo: servo sockets along the bottom, green **POWER** screw terminal on top, round capacitor on the left. Logic power (**VCC**) and servo power (green terminal) are already separate on this board. There is no jumper to pull. Leave the **A0–A5** pads unsoldered so the I2C address stays `0x40`.
 
-Use the **left** header. Top to bottom, with the servo sockets facing you along the bottom:
+The default I2C pins (physical 3 and 5) stay free for the other project. Sentry uses a software bus on the next free 3.3 V and ground pair:
 
-| Left header | Connect to |
-| --- | --- |
-| GND | Pi pin 6 (GND) |
-| OE | leave open (the board already enables the outputs) |
-| SCL | Pi pin 5 (GPIO3) |
-| SDA | Pi pin 3 (GPIO2) |
-| VCC | Pi pin 1 (**3.3 V**, not 5 V) |
+| Left header | Connect to | What that pin is |
+| --- | --- | --- |
+| SDA | Pi pin 16 | GPIO23 |
+| VCC | Pi pin 17 | 3.3 V |
+| SCL | Pi pin 18 | GPIO24 |
+| GND | Pi pin 20 | ground |
+| OE | leave open | outputs are already enabled |
 
-The right-hand header repeats those same signals for daisy-chaining. Use one side only.
+`scripts/setup-pi.sh` adds this line to `/boot/firmware/config.txt` and leaves the hardware I2C bus enabled:
+
+```
+dtoverlay=i2c-gpio,bus=3,i2c_gpio_sda=23,i2c_gpio_scl=24
+```
+
+Reboot after that line is added. The bus number is `pca9685.bus` in `config.toml`.
 
 Servo power goes only to the green terminal:
 
@@ -83,16 +89,16 @@ Raspberry Pi OS Bookworm, 64-bit. Python 3.11 or newer.
 bash scripts/setup-pi.sh
 ```
 
-The script creates `.venv`, installs the Python packages, and turns on I2C. Then:
+The script creates `.venv`, installs the Python packages, keeps the default I2C bus available, and adds the software bus on pins 16 and 18. Then:
 
 ```bash
 sudo usermod -aG i2c,video $USER
 ```
 
-Log out and back in. Copy the project onto the Pi first (the script runs from the repo root). Reboot if `i2cdetect` does not show the board:
+Log out and back in. Copy the project onto the Pi first (the script runs from the repo root). Reboot so the new I2C bus exists, then:
 
 ```bash
-i2cdetect -y 1
+i2cdetect -y 3
 ```
 
 Address `40` should appear. `70` is the PCA9685 all-call address and can show up as well.
@@ -132,7 +138,7 @@ journalctl -u sentry -f
 
 | What you see | What to check |
 | --- | --- |
-| Arm fails, I2C error in the page | `i2cdetect -y 1` shows `40`. User is in group `i2c`. I2C was enabled, then the Pi was rebooted. SDA is pin 3, SCL is pin 5, logic is 3.3 V. |
+| Arm fails, I2C error in the page | `i2cdetect -y 3` shows `40`. User is in group `i2c`. The `i2c-gpio` line is in `/boot/firmware/config.txt` and the Pi was rebooted. SDA is pin 16, SCL is pin 18, power is pin 17, ground is pin 20. |
 | Servo buzzes or twitches | Common ground is connected. Servo supply can actually deliver the current. Pulse still 500–2500 µs at 50 Hz. |
 | Servo slams into the bracket | Power off. Narrow `min_angle` / `max_angle`. Reseat the horn at center. |
 | Camera pill says no camera | `v4l2-ctl --list-devices`. Set `camera.device` to the other index (`0` or `1`, or `/dev/video0`). User is in group `video`. Try another USB port. |

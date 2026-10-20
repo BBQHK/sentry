@@ -10,8 +10,30 @@ fi
 
 sudo apt-get update
 sudo apt-get install -y python3-pip python3-venv python3-dev i2c-tools python3-libgpiod v4l-utils
+# Keep the hardware I2C bus on GPIO2/GPIO3 for the other project.
 if command -v raspi-config >/dev/null; then
   sudo raspi-config nonint do_i2c 0 || true
+fi
+
+# Sentry's own bus: SDA GPIO23 (pin 16), SCL GPIO24 (pin 18).
+OVERLAY='dtoverlay=i2c-gpio,bus=3,i2c_gpio_sda=23,i2c_gpio_scl=24'
+BOOT=""
+if [[ -f /boot/firmware/config.txt ]]; then
+  BOOT=/boot/firmware/config.txt
+elif [[ -f /boot/config.txt ]]; then
+  BOOT=/boot/config.txt
+fi
+if [[ -n "$BOOT" ]]; then
+  if grep -q 'i2c_gpio_sda=23' "$BOOT"; then
+    echo "Software I2C overlay already present in $BOOT"
+  else
+    echo "$OVERLAY" | sudo tee -a "$BOOT" >/dev/null
+    echo "Added $OVERLAY to $BOOT"
+    echo "Reboot before starting Sentry."
+  fi
+else
+  echo "Add this line to the Pi boot config, then reboot:"
+  echo "  $OVERLAY"
 fi
 
 python3 -m venv .venv
@@ -29,4 +51,4 @@ fi
 echo "Start Sentry:"
 echo "  .venv/bin/python -m sentry"
 echo
-echo "If i2cdetect does not list 40, reboot once after enabling I2C."
+echo "After reboot, i2cdetect -y 3 should list 40."
