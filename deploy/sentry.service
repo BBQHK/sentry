@@ -5,13 +5,11 @@ Wants=network-online.target
 
 [Service]
 Type=simple
-# Change User, Group, and both paths if the Pi account is not "pi".
-# That account must be in the i2c and video groups.
-User=pi
-Group=pi
-WorkingDirectory=/home/pi/sentry
+# Same Pi account as Hamster Monitor. It must be in the i2c and video groups.
+User=king
+WorkingDirectory=/home/king/Desktop/sentry
 Environment=PYTHONUNBUFFERED=1
-ExecStart=/home/pi/sentry/.venv/bin/python -m sentry
+ExecStart=/home/king/Desktop/sentry/.venv/bin/python -m sentry
 Restart=on-failure
 RestartSec=2
 

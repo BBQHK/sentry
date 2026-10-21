@@ -125,7 +125,7 @@ Stopping Sentry does not clear the PCA9685. The chip keeps the last pulse and th
 
 ## Run at boot
 
-Edit `User`, `Group`, and the paths in `deploy/sentry.service` if the account is not `pi`.
+`deploy/sentry.service` runs as `king`, with the repo at `/home/king/Desktop/sentry`, matching the Hamster Monitor Pi. That account must be in the `i2c` and `video` groups.
 
 ```bash
 sudo cp deploy/sentry.service /etc/systemd/system/sentry.service
