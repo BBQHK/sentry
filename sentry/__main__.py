@@ -45,15 +45,10 @@ def main(argv: list[str] | None = None) -> int:
         settings = replace(settings, port=args.port)
 
     driver, mode = build_driver(settings, simulate=args.simulate)
-    armed = args.arm or settings.arm_on_start
-    gimbal = Gimbal(settings, driver, mode, armed=armed)
-    # Soft targets start at axis center (135°). Arming on start writes that pose.
-    gimbal.center()
+    gimbal = Gimbal(settings, driver, mode, armed=args.arm or settings.arm_on_start)
     camera = Camera(settings)
     camera.pose = gimbal.angles
     gimbal.start()
-    if armed:
-        log.info("Gimbal armed on start; moving pan/tilt to center")
     camera.start()
     app = create_app(settings, gimbal, camera)
 

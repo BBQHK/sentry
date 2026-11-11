@@ -32,9 +32,8 @@ min_pulse_us = 500
 max_pulse_us = 2500
 actuation_range = 270
 default_speed = 90
-# Drive pan/tilt to their center angles (135°) as soon as Sentry starts.
-# Set false if you only want pulses after Arm is pressed in the browser.
-arm_on_start = true
+# Pulses start only after Arm is pressed in the browser, unless this is true.
+arm_on_start = false
 
 [servos.pan]
 channel = 0

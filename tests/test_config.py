@@ -16,7 +16,7 @@ class ConfigTests(unittest.TestCase):
         self.assertEqual(settings.min_pulse_us, 500)
         self.assertEqual(settings.max_pulse_us, 2500)
         self.assertEqual(settings.pan.center, 135)
-        self.assertTrue(settings.arm_on_start)
+        self.assertFalse(settings.arm_on_start)
 
     def test_missing_file(self):
         with self.assertRaises(ConfigError):
